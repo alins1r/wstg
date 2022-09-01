@@ -491,7 +491,7 @@ Char() function can be used to replace English char. For example, char(114,111,1
 
 `' UNION SELECT password FROM Users WHERE name='root'--`
 
-To apply the Char(), the SQL injeciton statement will be
+To apply the Char(), the SQL injection statement will be
 
 `' UNION SELECT password FROM Users WHERE name=char(114,111,111,116)--`
 
@@ -547,6 +547,14 @@ OR 'SQLi' = N'SQLi'
 1 && 1 = 1
 ```
 
+### SQL Wildcard Injection
+
+Most SQL dialects support both single-character wildcards (usually "`?`" or "`_`") and multi-character wildcards (usually "`%`" or "`*`"), which can be used in queries with the `LIKE` operator. Even when appropriate controls (such as parameters or prepared statements) are used to protect against SQL injection attacks, it may be possible to inject wildcards into queries.
+
+For example, if a web application allows users to enter a discount code as part of the checkout process, and it checks whether this code exists in the database using a query such as `SELECT * FROM discount_codes WHERE code LIKE ':code'`, then entering a value of `%` (which would be inserted in place of the `:code` parameter) would match all of the discount codes.
+
+This technique could also be used to determine exact discount codes through increasingly specific queries (such as `a%`, `b%`, `ba%`, etc).
+
 ## Remediation
 
 - To secure the application from SQL injection vulnerabilities, refer to the [SQL Injection Prevention CheatSheet](https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html).
@@ -583,8 +591,7 @@ Technology specific Testing Guide pages have been created for the following DBMS
 - [Chris Anley: "More Advanced SQL Injection"](https://www.cgisecurity.com/lib/more_advanced_sql_injection.pdf)
 - [David Litchfield: "Data-mining with SQL Injection and Inference"](https://dl.packetstormsecurity.net/papers/attack/sqlinference.pdf)
 - [Imperva: "Blinded SQL Injection"](https://www.imperva.com/lg/lgw.asp?pid=369)
-- [Ferruh Mavituna: "SQL Injection Cheat Sheet"](http://ferruh.mavituna.com/sql-injection-cheatsheet-oku/)
-- [Kevin Spett from SPI Dynamics: "SQL Injection"](https://docs.google.com/file/d/0B5CQOTY4YRQCSWRHNkNaaFMyQTA/edit)
+- [PortSwigger: "SQL Injection Cheat Sheet"](https://portswigger.net/web-security/sql-injection/cheat-sheet)
 - [Kevin Spett from SPI Dynamics: "Blind SQL Injection"](https://repo.zenk-security.com/Techniques%20d.attaques%20%20.%20%20Failles/Blind_SQLInjection.pdf)
 - ["ZeQ3uL" (Prathan Phongthiproek) and "Suphot Boonchamnan": "Beyond SQLi: Obfuscate and Bypass"](https://www.exploit-db.com/papers/17934/)
 - [Adi Kaploun and Eliran Goshen, Check Point Threat Intelligence & Research Team: "The Latest SQL Injection Trends"](http://blog.checkpoint.com/2015/05/07/latest-sql-injection-trends/)

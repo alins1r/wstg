@@ -6,21 +6,21 @@
 
 ## Summary
 
-It is very common, and even recommended, for programmers to include detailed comments and metadata on their source code. However, comments and metadata included into the HTML code might reveal internal information that should not be available to potential attackers. Comments and metadata review should be done in order to determine if any information is being leaked.
+It is very common, and even recommended, for programmers to include detailed comments and metadata on their source code. However, comments and metadata included into the HTML code might reveal internal information that should not be available to potential attackers. Comments and metadata review should be done in order to determine if any information is being leaked. Additionally some applications may leak information in the body of redirect responses.
 
-For modern web apps, the use of client-Side JavaScript for the front-end is becoming more popular. Popular front-end construction technologies use client-side JavaScript like ReactJS, AngularJS, or Vue.  Similar to the comments and metadata in HTML code, many programmers also hardcode sensitive information in JavaScript variables on the front-end. Sensitive information can include (but is not limited to): Private API Keys (*e.g.* an unrestricted Google Map API Key), internal IP addresses, sensitive routes (*e.g.* route to hidden admin pages or functionality), or even credentials. This sensitive information can be leaked from such front-end JavaScript code. A review should be done in order to determine if any sensitive information leaked which could be used by attackers for abuse.
+For modern web apps, the use of client-Side JavaScript for the front-end is becoming more popular. Popular front-end construction technologies use client-side JavaScript like ReactJS, AngularJS, or Vue. Similar to the comments and metadata in HTML code, many programmers also hardcode sensitive information in JavaScript variables on the front-end. Sensitive information can include (but is not limited to): Private API Keys (*e.g.* an unrestricted Google Map API Key), internal IP addresses, sensitive routes (*e.g.* route to hidden admin pages or functionality), or even credentials. This sensitive information can be leaked from such front-end JavaScript code. A review should be done in order to determine if any sensitive information leaked which could be used by attackers for abuse.
 
 For large web applications, performance issues are a big concern to programmers. Programmers have used different methods to optimize front-end performance, including Syntactically Awesome Style Sheets (SASS), Sassy CSS (SCSS), webpack, etc. Using these technologies, front-end code will sometimes become harder to understand and difficult to debug, and because of it, programmers often deploy source map files for debugging purposes. A "source map" is a special file that connects a minified/uglified version of an asset (CSS or JavaScript) to the original authored version. Programmers are still debating whether or not to bring source map files to the production environment. However, it is undeniable that source map files or files for debugging if released to the production environment will make their source more human-readable. It can make it easier for attackers to find vulnerabilities from the front-end or collect sensitive information from it. JavaScript code review should be done in order to determine if any debug files are exposed from the front-end. Depending on the context and sensitivity of the project, a security expert should decide whether the files should exist in the production environment or not.
 
 ## Test Objectives
 
-- Review webpage comments and metadata to find any information leakage.
+- Review webpage comments, metadata, and redirect bodies to find any information leakage.
 - Gather JavaScript files and review the JS code to better understand the application and to find any information leakage.
 - Identify if source map files or other front-end debug files exist.
 
 ## How to Test
 
-### Review webpage comments and metadata
+### Review Webpage Comments and Metadata
 
 HTML comments are often used by the developers to include debugging information about the application. Sometimes, they forget about the comments and they leave them in production environments. Testers should look for HTML comments which start with `<!--`.
 
@@ -127,8 +127,6 @@ In some cases, testers may find sensitive routes from JavaScript code, such as l
 
 Source map files will usually be loaded when DevTools open. Testers can also find source map files by adding the ".map" extension after the extension of each external JavaScript file. For example, if a tester sees a `/static/js/main.chunk.js` file, they can then check for its source map file by visiting `/static/js/main.chunk.js.map`.
 
-#### Black-Box Testing
-
 Check source map files for any sensitive information that can help the attacker gain more insight about the application. For example:
 
 ```json
@@ -148,12 +146,19 @@ Check source map files for any sensitive information that can help the attacker 
 
 When websites load source map files, the front-end source code will become readable and easier to debug.
 
+### Identify Redirect Responses which Leak Information
+
+Although redirect responses are not generally expected to contain any significant web content there is no assurance that they cannot contain content. So, while series 300 (redirect) responses often contain "redirecting to `https://example.com/`" type content they may also leak content.
+
+Consider a situation in which a redirect response is the result of an authentication or authorization check, if that check fails the server may respond redirecting the user back to a "safe" or "default" page, yet the redirect response itself may still contain content which isn't shown in the browser but is indeed transmitted to the client. This can be seen either leveraging browser developer tools or via a personal proxy (such as ZAP, Burp, Fiddler, or Charles).
+
 ## Tools
 
 - [Wget](https://www.gnu.org/software/wget/wget.html)
 - Browser "view source" function
 - Eyeballs
 - [Curl](https://curl.haxx.se/)
+- [Zaproxy](https://www.zaproxy.org)
 - [Burp Suite](https://portswigger.net/burp)
 - [Waybackurls](https://github.com/tomnomnom/waybackurls)
 - [Google Maps API Scanner](https://github.com/ozguralp/gmapsapiscanner/)
@@ -161,6 +166,7 @@ When websites load source map files, the front-end source code will become reada
 ## References
 
 - [KeyHacks](https://github.com/streaak/keyhacks)
+- [RingZer0 Online CTF](https://ringzer0ctf.com/challenges/104) - Challenge 104 "Admin Panel".
 
 ### Whitepapers
 

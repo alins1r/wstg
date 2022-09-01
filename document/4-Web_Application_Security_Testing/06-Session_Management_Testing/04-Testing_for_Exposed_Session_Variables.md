@@ -28,7 +28,7 @@ Each time Session ID data is passed between the client and the server, the proto
 
 ### Testing for Encryption & Reuse of Session Tokens Vulnerabilities
 
-Protection from eavesdropping is often provided by SSL encryption, but may incorporate other tunneling or encryption. It should be noted that encryption or cryptographic hashing of the Session ID should be considered separately from transport encryption, as it is the Session ID itself being protected, not the data that may be represented by it.
+Protection from eavesdropping is often provided by TLS encryption, but may incorporate other tunneling or encryption. It should be noted that encryption or cryptographic hashing of the Session ID should be considered separately from transport encryption, as it is the Session ID itself being protected, not the data that may be represented by it.
 
 If the Session ID could be presented by an attacker to the application to gain access, then it must be protected in transit to mitigate that risk. It should therefore be ensured that encryption is both the default and enforced for any request or response where the Session ID is passed, regardless of the mechanism used (e.g., a hidden form field). Simple checks such as replacing `https://` with `http://` during interaction with the application should be performed, together with modification of form posts to determine if adequate segregation between the secure and non-secure sites is implemented.
 
@@ -75,7 +75,7 @@ All interaction between the Client and Application should be tested at least aga
 
 - How are Session IDs transferred? e.g., GET, POST, Form Field (including hidden fields)
 - Are Session IDs always sent over encrypted transport by default?
-- Is it possible to manipulate the application to send Session IDs unencrypted? e.g., by changing HTTP to HTTPS?
+- Is it possible to manipulate the application to send Session IDs unencrypted? e.g., by changing HTTPS to HTTP?
 - What cache-control directives are applied to requests/responses passing Session IDs?
 - Are these directives always present? If not, where are the exceptions?
 - Are GET requests incorporating the Session ID used?

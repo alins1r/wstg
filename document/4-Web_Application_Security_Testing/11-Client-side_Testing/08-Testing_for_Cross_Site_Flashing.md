@@ -71,7 +71,7 @@ To decompile a SWF file with flare just type:
 
 This results in a new file called hello.flr.
 
-Decompilation helps testers because it allows for white-box testing of the Flash applications. A quick web search can lead you to various disassmeblers and flash security tools.
+Decompilation helps testers because it allows for white-box testing of the Flash applications. A quick web search can lead you to various disassemblers and flash security tools.
 
 ### Undefined Variables FlashVars
 
@@ -271,7 +271,6 @@ Since the release of Flash Player 9.0.124.0, XSS is no longer exploitable, but G
 
 The following tools may be helpful in working with SWF:
 
-- [Adobe SWF Investigator](https://labs.adobe.com/technologies/swfinvestigator/)
 - [OWASP SWFIntruder](https://wiki.owasp.org/index.php/Category:SWFIntruder)
 - [Decompiler – Flare](http://www.nowrap.de/flare.html)
 - [Disassembler – Flasm](http://flasm.sourceforge.net/)
